@@ -324,7 +324,7 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart</IncludePath>
+              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart;..\DATAPROCESS;..\HARDWARE\adc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -555,16 +555,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>README</GroupName>
-          <Files>
-            <File>
-              <FileName>README.TXT</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\README.TXT</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>HARDWARE</GroupName>
           <Files>
             <File>
@@ -581,6 +571,26 @@
               <FileName>usart1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\usart\usart1.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\gpio\gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\adc\adc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DATAPROCESS</GroupName>
+          <Files>
+            <File>
+              <FileName>dataprocessing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DATAPROCESS\dataprocessing.c</FilePath>
             </File>
           </Files>
         </Group>

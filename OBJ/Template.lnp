@@ -33,6 +33,9 @@
 "..\obj\esp8266.o"
 "..\obj\timer7.o"
 "..\obj\usart1.o"
+"..\obj\gpio.o"
+"..\obj\adc.o"
+"..\obj\dataprocessing.o"
 --strict --scatter "..\OBJ\Template.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

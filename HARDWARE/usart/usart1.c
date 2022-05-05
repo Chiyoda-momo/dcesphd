@@ -90,6 +90,6 @@ void u3_printf(char* fmt,...){
 	{
 	  while(USART_GetFlagStatus(USART3,USART_FLAG_TC)==RESET); //循环发送,直到发送完毕   ;
 		USART_SendData(USART3,(u16)USART3_TX_BUF[j]); 
-		printf("发送一条OK!\n");
 	} 
+	printf("发送一条OK!\n");
 }

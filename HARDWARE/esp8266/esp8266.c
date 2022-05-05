@@ -13,7 +13,7 @@ void Delay(u32 count)
 
  }
 void esp8266_Config(void){
-	while(esp8266_quit_trans());
+	//while(esp8266_quit_trans());
 	delay_ms(500);
 	printf("开始设置工作模式!");
 	//设置工作模式 1：station模式   2：AP模式  3：兼容 AP+station模式
@@ -40,7 +40,7 @@ void esp8266_Config(void){
 	printf("tcp连接已建立!");
 	//是否开启透传模式  0：表示关闭 1：表示开启透传
 	esp8266_send_cmd("AT+CIPMODE=1","OK",200);
-	printf("透传模式已开启!");
+	printf("开机开启透传模式!");
 }
 
 //ESP8266模块和PC进入透传模式
@@ -57,7 +57,7 @@ u8 esp8266_quit_trans(void)
 {
 	u8 result=1;
 	u3_printf("%s","+++");
-	Delay(90000000);			//等待500ms太少 要1000ms才可以退出
+	Delay(9000000);			//等待500ms太少 要1000ms才可以退出
 	result=esp8266_send_cmd("AT","OK",600);//退出透传判断.
 	if(result)
 		printf("退出透传模式失败!!");
@@ -111,6 +111,7 @@ u8* esp8266_check_cmd(u8 *str)
 		strx=strstr((const char*)USART3_RX_BUF,(const char*)str);
 		printf("接收的数据为:\n");
 		uart_send_buff((u8*)strx,strlen(strx));
+		USART3_RX_STA = 0;
 	} 
 	return (u8*)strx;
 }
