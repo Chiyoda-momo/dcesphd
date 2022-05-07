@@ -30,3 +30,9 @@
 ..\obj\dataprocessing.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\obj\dataprocessing.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\dataprocessing.o: ..\STM32F10x_FWLib\inc\misc.h
+..\obj\dataprocessing.o: ..\TOOLS\cJSON.h
+..\obj\dataprocessing.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\obj\dataprocessing.o: ..\HARDWARE\timer\time6.h
+..\obj\dataprocessing.o: ..\SYSTEM\sys\sys.h
+..\obj\dataprocessing.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\dataprocessing.o: ..\SYSTEM\delay\delay.h

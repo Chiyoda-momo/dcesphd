@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart;..\DATAPROCESS;..\HARDWARE\adc</IncludePath>
+              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart;..\DATAPROCESS;..\HARDWARE\adc;..\TOOLS</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -582,6 +582,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\adc\adc.c</FilePath>
             </File>
+            <File>
+              <FileName>time6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\timer\time6.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -591,6 +596,16 @@
               <FileName>dataprocessing.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DATAPROCESS\dataprocessing.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>TOOLS</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TOOLS\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>
