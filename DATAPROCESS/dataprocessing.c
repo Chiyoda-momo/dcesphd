@@ -1,7 +1,5 @@
 //进行数据处理和端口控制
 #include<dataprocessing.h>
-#include<stdio.h>
-#include<delay.h>
 
 u8* esp8266_data = NULL; // 从服务端获取的JSON字符串
 u8 haveData = 0; // 是否有数据标志位
@@ -14,10 +12,10 @@ void set_data(u8* data){
 
 /**
 esp8266_data格式: 
-{lowerPowerTo : ["c5",...],powerToNode : ["p2",...],highPowerTo : ["c4",...],nodeToCheck : ["c1",...]}
+{"lowerPowerTo" : ["c5",...],"powerToNode" : ["p2",...],"highPowerTo" : ["c4",...],"nodeToCheck" : ["c1",...]}
 为一个JSON字符串格式,故使用cJSON进行解析
 */
-void data_processing(){
+void data_process(){
 	if(!esp8266_data){
 		//如果数据是空的,就结束
 		haveData = 0;
@@ -25,8 +23,13 @@ void data_processing(){
 		return;
 	}
 	//不为空就做处理
+	printf("数据处理前,得到的esp8266data为 : \n");
+	printf((char*)esp8266_data);
 	cJSON* data = cJSON_Parse((char*)esp8266_data);//根据获取的数据构造cJSON对象
 	if(!data){
+		const char* errorPtr = cJSON_GetErrorPtr();
+		printf("错误数据:\n");
+		printf(errorPtr);
 		//获取的JSON字符串有问题!
 		processOK = 0;//解析出问题
 		return;
@@ -143,11 +146,12 @@ void data_processing(){
         }else{
            pin += (groupAndPin[1] - '0');
         }
-				controlBit |= pin;
+				controlBit |= (1 << (pin - 1));
 			}
 		}
 		lowerAndHighPowerControl |= controlBit;
 		lowerAndHighPowerBit |= ~controlBit;
+		lowerAndHighPowerBit &= 0xff;
 		//直接处理
 		//A3~A8,A11~A12 : 0000_0000 继电器控制
 		//A13~A15,B0~B4 : 0000_0000 电平输入
@@ -176,11 +180,12 @@ void data_processing(){
            pin += (groupAndPin[1] - '0');
         }
 				//直接处理
-				controlBit |= pin;
+				controlBit |= (1 << (pin - 1));
 			}
 		}
 		lowerAndHighPowerControl |= controlBit;
 		lowerAndHighPowerBit |= controlBit;
+		lowerAndHighPowerBit &= 0xff;
 	}
 	gpio_output_control('C',0,lowerAndHighPowerControl,1);//开启继电器
 	gpio_output_control('D',0,lowerAndHighPowerBit,1);//输入电平
@@ -222,7 +227,7 @@ void data_processing(){
 			}
 		}
 	}
-	
+	delay_ms(100);
 	//处理完成后删除cJSON对象,释放空间
 	cJSON_Delete(data);//后面的4个对象是data中的,所以会连带删除.
 }
@@ -637,11 +642,17 @@ u8 get_gpioc_data(u8 pin){
 
 u8 get_gpioc08_data(){
 	u16 readData = GPIO_ReadInputData(GPIOC);//读取C0~C15的数据,0~7在高八位
+	char soutData[16];
+	sprintf(soutData,"%X",readData);
+	printf("C0-C15: %s\n",soutData);
 	return (readData >> 8) & 0xff;//取高八位
 }
 
 u8 get_gpioc09_data(){
 	u16 readData = GPIO_ReadInputData(GPIOC);////读取C0~C15的数据,8~15在低八位
+	char soutData[16];
+	sprintf(soutData,"%X",readData);
+	printf("C0-C15: %s\n",soutData);
 	return readData & 0xff;//取低八位
 }
 

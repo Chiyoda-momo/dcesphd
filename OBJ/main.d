@@ -36,9 +36,9 @@
 ..\obj\main.o: ..\HARDWARE\esp8266\esp8266.h
 ..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\main.o: ..\HARDWARE\timer\timer7.h
+..\obj\main.o: ..\HARDWARE\timer\time6.h
 ..\obj\main.o: ..\HARDWARE\gpio\gpio.h
 ..\obj\main.o: ..\HARDWARE\adc\adc.h
 ..\obj\main.o: ..\DATAPROCESS\dataprocessing.h
 ..\obj\main.o: ..\TOOLS\cJSON.h
 ..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-..\obj\main.o: ..\HARDWARE\timer\time6.h

@@ -5,6 +5,10 @@
 #include<stm32f10x_gpio.h>
 #include<cJSON.h>
 #include<time6.h>
+#include<stdio.h>
+#include<delay.h>
+#include<usart.h>
+#include<stdio.h>
 /**
 拟定: A0~A2为电源控制端,接入3-8译码器,控制八路继电器通断开启芯片电源.
 需要16个端口作为控制端口,8个控制继电器,8个进行信号输入.

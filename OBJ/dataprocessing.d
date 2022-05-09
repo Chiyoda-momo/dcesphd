@@ -36,3 +36,4 @@
 ..\obj\dataprocessing.o: ..\SYSTEM\sys\sys.h
 ..\obj\dataprocessing.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\dataprocessing.o: ..\SYSTEM\delay\delay.h
+..\obj\dataprocessing.o: ..\SYSTEM\usart\usart.h

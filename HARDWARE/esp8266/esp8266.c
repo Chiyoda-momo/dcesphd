@@ -29,7 +29,7 @@ void esp8266_Config(void){
 	delay_ms(1000);
 	printf("重启完成");
 	//让模块连接上自己的路由
-	esp8266_send_cmd("AET0","OK",500);
+	//while(esp8266_send_cmd("AET0","OK",500));
 	while(esp8266_send_cmd("AT+CWJAP=\"YuzuDeskTop\",\"6C606666\"","OK",600));
 	printf("wifi已连接!");
 	//=0：单路连接模式     =1：多路连接模式
@@ -38,14 +38,15 @@ void esp8266_Config(void){
 	//建立TCP连接  这四项分别代表了 要连接的ID号0~4   连接类型  远程服务器IP地址   远程服务器端口号
 	while(esp8266_send_cmd("AT+CIPSTART=\"TCP\",\"192.168.137.1\",10005","OK",600));
 	printf("tcp连接已建立!");
-	//是否开启透传模式  0：表示关闭 1：表示开启透传
-	esp8266_send_cmd("AT+CIPMODE=1","OK",200);
-	printf("开机开启透传模式!");
+	
+	
 }
 
 //ESP8266模块和PC进入透传模式
 void esp8266_start_trans(void)
 {
+	//是否开启透传模式  0：表示关闭 1：表示开启透传
+	while(esp8266_send_cmd("AT+CIPMODE=1","OK",500));
 	//透传模式下 开始发送数据的指令 这个指令之后就可以直接发数据了
 	esp8266_send_cmd("AT+CIPSEND","OK",600);
 	printf("透传模式传输数据已开始!");
@@ -57,12 +58,22 @@ u8 esp8266_quit_trans(void)
 {
 	u8 result=1;
 	u3_printf("%s","+++");
-	Delay(9000000);			//等待500ms太少 要1000ms才可以退出
-	result=esp8266_send_cmd("AT","OK",600);//退出透传判断.
-	if(result)
-		printf("退出透传模式失败!!");
-	else
+	Delay(300000000);			//等待500ms太少 要1000ms才可以退出
+	result=esp8266_send_cmd("AT","OK",500);//退出透传判断.
+	if(result){
+		u3_printf("%s","+++");
+		Delay(300000000);
+		result=esp8266_send_cmd("AT","OK",500);//退出透传判断.
+		if(result){
+			printf("退出透传模式失败!!");
+		}else{
+			printf("退出透传模式成功!!");
+			while(esp8266_send_cmd("AT+CIPMODE=0","OK",500));
+		}
+	}else{
 		printf("退出透传模式成功!");
+		while(esp8266_send_cmd("AT+CIPMODE=0","OK",500));
+	}
 	return result;
 }
 
@@ -135,7 +146,7 @@ u8* esp8266_send_data(u8 *cmd,u16 waittime)
 			{
 				USART3_RX_BUF[USART3_RX_STA&0X7FFF]=0;//添加结束符
 				ack=(char*)USART3_RX_BUF;
-				printf("ack:%s\r\n",(u8*)ack);
+				printf("发送数据后的接收:ack:%s\r\n",(u8*)ack);
 				USART3_RX_STA=0;
 				break;//得到有效数据 
 			} 
