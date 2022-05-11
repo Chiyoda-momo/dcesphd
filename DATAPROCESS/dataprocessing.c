@@ -124,7 +124,7 @@ void data_process(){
 	u8 lowerAndHighPowerControl = 0;
 	u8 lowerAndHighPowerBit = 0;
 	if(lowerPowerTo){
-		u8 controlBit = 0;
+		u8 controlBit = 0; 
 		for(int i = 0;i < cJSON_GetArraySize(lowerPowerTo);i++){
 			cJSON* lowerPower = cJSON_GetArrayItem(lowerPowerTo,i);
 			if(cJSON_String == lowerPower->type){
@@ -154,7 +154,7 @@ void data_process(){
 		lowerAndHighPowerBit &= 0xff;
 		//直接处理
 		//A3~A8,A11~A12 : 0000_0000 继电器控制
-		//A13~A15,B0~B4 : 0000_0000 电平输入
+		//A13~A15,D0-D1,B2~B4 : 0000_0000 电平输入
 	}
 	if(highPowerTo){
 		u8 controlBit = 0;
@@ -280,7 +280,7 @@ void gpio_input_data_process(u8 gpio_pin,u8 process_type){
 		}
 	}else if(process_type == 1){
 		//模拟输入模式处理
-		u16* temp = get_adc(gpio_pin);
+		u16* temp = get_ adc(gpio_pin);
 		for(u8 i = 0;i < 500;i++){
 			sendAdcData[i] = *temp;
 			temp++;
@@ -342,8 +342,8 @@ void gpio_a3a8_a11a12_binaryDataSet(u8 binaryData){
 }
 
 void gpio_a13a15_b0b4_binaryDataSet(u8 binaryData){
-	//根据二进制位操作A13-A15,B0-B4这8个IO
-	//A13-A15,B0-B4 : 0000_0000
+	//根据二进制位操作A13-A15,PD0-PD1,B2-B4这8个IO
+	//A13-A15,PD0~PD1,PB2-B4 : 0000_0000
 	u8 a = binaryData & 1;
 	if(a){
 		GPIO_SetBits(GPIOB,GPIO_Pin_4);
@@ -364,15 +364,15 @@ void gpio_a13a15_b0b4_binaryDataSet(u8 binaryData){
 	}
 	a = binaryData & (1 << 3);
 	if(a){
-		GPIO_SetBits(GPIOB,GPIO_Pin_1);
+		GPIO_SetBits(GPIOD,GPIO_Pin_1);
 	}else{
-		GPIO_ResetBits(GPIOB,GPIO_Pin_1);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_1);
 	}
 	a = binaryData & (1 << 4);
 	if(a){
-		GPIO_SetBits(GPIOB,GPIO_Pin_0);
+		GPIO_SetBits(GPIOD,GPIO_Pin_0);
 	}else{
-		GPIO_ResetBits(GPIOB,GPIO_Pin_0);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_0);
 	}
 	a = binaryData & (1 << 5);
 	if(a){
@@ -502,16 +502,16 @@ void gpiob_control(u8 pin,u8 gpio_status){
 	switch(pin){
 		case 0:
 			if(gpio_status){
-				GPIO_SetBits(GPIOB,GPIO_Pin_0);
+				GPIO_SetBits(GPIOD,GPIO_Pin_0);
 			}else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_0);
+				GPIO_ResetBits(GPIOD,GPIO_Pin_0);
 			}
 		break;
 		case 1:
 			if(gpio_status){
-				GPIO_SetBits(GPIOB,GPIO_Pin_1);
+				GPIO_SetBits(GPIOD,GPIO_Pin_1);
 			}else{
-				GPIO_ResetBits(GPIOB,GPIO_Pin_1);
+				GPIO_ResetBits(GPIOD,GPIO_Pin_1);
 			}
 		break;
 		case 2:
@@ -657,6 +657,8 @@ u8 get_gpioc09_data(){
 }
 
 u16* get_adc(u8 adcPort){
+	delay_ms(1000);
+	delay_ms(1000);
 	if(adcPort == 9){
 		return adc1_data;
 	}

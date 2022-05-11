@@ -39,13 +39,14 @@ void TIM6_IRQHandler(void)
 { 	
 	if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)//是更新中断
 	{	 			   
-		u16 adc1Data = get_adc1();
-		u16 adc2Data = get_adc2();
-		adc1_data[time] = adc1Data;
-		adc2_data[time] = adc2Data;
-		time++;
-		if(time==500){
+		if(time > 499){
 			time=0;
+		}else{
+			u16 adc1Data = get_adc1();
+			u16 adc2Data = get_adc2();
+			adc1_data[time] = adc1Data;
+			adc2_data[time] = adc2Data;
+			time++;
 		}
 	}    
 	TIM_ClearITPendingBit(TIM6, TIM_IT_Update);  //清除TIM6更新中断标志  

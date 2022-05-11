@@ -1,10 +1,11 @@
 #include<adc.h>
 
+//PB0,PB1用作ADC输入于转换通道
 void adc1_config(){
 	GPIO_InitTypeDef GPIO_InitStruceD;//结构体属于变量，变量的声明必须位于函数可执行的语句之前
 	ADC_InitTypeDef ADC_InitStructure;
 	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);//开启GPIOD的时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);//开启GPIOB的时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);//开启ADC1的时钟
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6); //设置分频因子为6.
 	
@@ -35,7 +36,7 @@ void adc2_config(){
 	GPIO_InitTypeDef GPIO_InitStruceD;//结构体属于变量，变量的声明必须位于函数可执行的语句之前
 	ADC_InitTypeDef ADC_InitStructure;
 	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);//开启GPIOD的时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);//开启GPIOD的时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2,ENABLE);//开启ADC2的时钟
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6); //设置分频因子为6.
 	
@@ -65,7 +66,7 @@ void adc2_config(){
 
 u16 get_adc1(){
   //配置ADCx，ADC通道，规则采样顺序，采样时间
-  ADC_RegularChannelConfig(ADC1,ADC_Channel_0,1,ADC_SampleTime_239Cycles5);
+  ADC_RegularChannelConfig(ADC1,ADC_Channel_8,1,ADC_SampleTime_239Cycles5);
   ADC_SoftwareStartConvCmd(ADC1,ENABLE);          //使能ADC1的软件转换启动功能
   while(!ADC_GetFlagStatus(ADC1,ADC_FLAG_EOC));   //等待转换结束
   return ADC_GetConversionValue(ADC1);            //返回最近一次ADC1规则组的转换结果
@@ -73,7 +74,7 @@ u16 get_adc1(){
 
 u16 get_adc2(){
 	//配置ADCx，ADC通道，规则采样顺序，采样时间
-  ADC_RegularChannelConfig(ADC2,ADC_Channel_10,1,ADC_SampleTime_239Cycles5);
+  ADC_RegularChannelConfig(ADC2,ADC_Channel_9,1,ADC_SampleTime_239Cycles5);
   ADC_SoftwareStartConvCmd(ADC2,ENABLE);          //使能ADC1的软件转换启动功能
   while(!ADC_GetFlagStatus(ADC2,ADC_FLAG_EOC));   //等待转换结束
   return ADC_GetConversionValue(ADC2);            //返回最近一次ADC2规则组的转换结果

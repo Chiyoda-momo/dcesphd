@@ -25,15 +25,28 @@ void gpio_control_output_config(){
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);//开启GPIOB的时钟
 	
-	GPIO_InitStruceB.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
-	GPIO_InitStruceB.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 
+	GPIO_InitStruceB.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出,PB0和PB1用作ADC输入和ADC转换通道(通道8,9)
+	GPIO_InitStruceB.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 
 														| GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_12 | GPIO_Pin_13
-														| GPIO_Pin_14 | GPIO_Pin_15;//PB0~PA9,PA12~PA15
+														| GPIO_Pin_14 | GPIO_Pin_15;//PB0~PA9,PB12~PB15
 	
 	GPIO_InitStruceB.GPIO_Speed = GPIO_Speed_50MHz;//配置为输入模式时输出驱动电路与端口是断开，所以输出速度配置无意义。
 
 	GPIO_Init(GPIOB,&GPIO_InitStruceB);
 	//GPIOB_Config---------------------------------------------------------------------------------------------------------
+	//GPIOD_Config---------------------------------------------------------------------------------------------------------
+	GPIO_InitTypeDef GPIO_InitStruceD;//结构体属于变量，变量的声明必须位于函数可执行的语句之前
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);//开启GPIOB的时钟
+	
+	GPIO_InitStruceD.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出,PB0和PB1用作ADC输入和ADC转换通道(通道8,9)
+	GPIO_InitStruceD.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;//PD0~PD1
+	
+	GPIO_InitStruceD.GPIO_Speed = GPIO_Speed_50MHz;//配置为输入模式时输出驱动电路与端口是断开，所以输出速度配置无意义。
+
+	GPIO_Init(GPIOD,&GPIO_InitStruceD);
+	//GPIOD_Config---------------------------------------------------------------------------------------------------------
+
 }
 //16个输入端口,2个模拟输入端口,模拟输入端口配置在adc中
 void gpio_control_input_config(){

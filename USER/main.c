@@ -15,24 +15,19 @@ u16 adc1_data[500];//adc1的数据
 u16 adc2_data[500];//adc2的数据
 u16 sendAdcData[500];//要传给服务端的adc数据
 u8 sendGpiocData;//要传给服务端的检测端数据
-u8 sendAllData[1500];//最终封装成要传给服务端的数据.
+u8 sendAllData[630];//最终封装成要传给服务端的数据.
 u8 processOK;//解析是否正常标志位
 
  int main(void)
  {	
-	u8 t;
-	u8 len;	
+	u16 t;
+	u16 len;	
 	 
   GPIO_InitTypeDef  GPIO_InitStructure;
  	
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOD, ENABLE);	 //使能PA,PD端口时钟
-	
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;				 //LED0-->PA.8 端口配置
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);	 //使能PD端口时钟
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO口速度为50MHz
-  GPIO_Init(GPIOA, &GPIO_InitStructure);					 //根据设定参数初始化GPIOA.8
-  GPIO_SetBits(GPIOA,GPIO_Pin_8);						 //PA.8 输出高
-
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;	    		 //LED1-->PD.2 端口配置, 推挽输出
   GPIO_Init(GPIOD, &GPIO_InitStructure);	  				 //推挽输出 ，IO口速度为50MHz
   GPIO_SetBits(GPIOD,GPIO_Pin_2); 						 //PD.2 输出高 	  
@@ -44,22 +39,22 @@ u8 processOK;//解析是否正常标志位
 	 NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//中断配置
 	 uart_init(115200);//串口1配置
 	 usart3_init(115200);//串口3配置
-	 printf("进行定时器初始化\n");
 	 TIM6_Int_Init(2000 - 1,72 - 1);//定时器6配置,2ms进行一次模拟输入取样 
 	 printf("开始esp8266初始化!");
 	 esp8266_Config();//ESP8266配置
 	 
 	 while(1)
 	{
-	    GPIO_ResetBits(GPIOA,GPIO_Pin_8);
 	    GPIO_SetBits(GPIOD,GPIO_Pin_2);
-			Delay(3000000);
-			GPIO_SetBits(GPIOA,GPIO_Pin_8);
+			delay_ms(1000);
+			delay_ms(1000);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_2);
-			Delay(3000000);
+			delay_ms(1000);
+			delay_ms(1000);
+		
 			//测试端消息
-			if(USART_RX_STA&0x8000){
-			//如果串口1有东西,也就是来自测试端的消息
+		/*if(USART_RX_STA&0x8000){
+			//如果串口1有消息
 				len = USART_RX_STA&0x3fff;	
 				u8 data[len];
 				printf("发送的消息是:\n");
@@ -86,24 +81,22 @@ u8 processOK;//解析是否正常标志位
 				delay_ms(100);
 				esp8266_quit_trans();
 			}
-			
+			*/
 			//ESP8266透传消息
 			if(USART3_RX_STA&0X8000){
 				//esp8266收到消息
 				len = USART3_RX_STA&0x3fff;
 				u8 data[len];
-				printf("接收到服务器的数据为:\n");
 				for(t = 0;t < len;t++){
-					USART1->DR=USART3_RX_BUF[t];
 					data[t] = USART3_RX_BUF[t];
-					while((USART1->SR&0X40)==0);
 				}
+				USART3_RX_STA = 0;
 				//需要进行数据处理,data[len]就是服务器发送的数据
 				//需要的数据是以{开头,}结尾的.
-				u8 datalen = 0;
+				u16 datalen = 0;
 				u8 js = 0;
-				u8 start = 0;
-				u8 end = 0;
+				u16 start = 0;
+				u16 end = 0;
 				for(t = 0;t < len;t++){
 					if(data[t] == '{'){
 						js = 1;
@@ -124,10 +117,12 @@ u8 processOK;//解析是否正常标志位
 				}
 				set_data(trueData);
 				data_process();//数据处理
-				
+	
 				if(!processOK){
 					printf("解析出错!!!\n");
-					Delay(30000000);
+					delay_ms(1000);
+					delay_ms(1000);
+					delay_ms(1000);
 					esp8266_start_trans();
 					for(u8 i = 0;i < 5;i++){
 						esp8266_send_data("解析数据出错.",500);
@@ -141,7 +136,6 @@ u8 processOK;//解析是否正常标志位
 				}else{
 					//数据打包和回传
 					//要打包的数据:sendAdcData,sendGpiocData.打包到sendAllData中.
-					printf("打包数据\n");
 					char* str1 = "adc:[";
 					char* str2 = "check:";
 					u16 index = 0;
@@ -149,8 +143,7 @@ u8 processOK;//解析是否正常标志位
 						sendAllData[index++] = *str1;
 						str1++;
 					}
-					printf("str1赋值完毕\n");
-					for(u16 i = 0;i < 500;i++){
+					for(u16 i = 0;i < 300;i++){
 						sendAllData[index++] = ((sendAdcData[i] >> 8) & 0xff) + 48;//高八位
 						sendAllData[index++] = (sendAdcData[i] & 0xff) + 48;//低八位
 					}
@@ -160,25 +153,17 @@ u8 processOK;//解析是否正常标志位
 						sendAllData[index++] = *str2;
 						str2++;
 					}
-					printf("str2赋值完毕\n");
 					char gpiocData[8];
 					sprintf(gpiocData,"%X",sendGpiocData);
 					for(u8 i = 0;i < 8;i++){
 						sendAllData[index++] = gpiocData[i];
 					}
-					printf("打包完毕\n");
-					for(u16 i = 0;i < index;i++){
-						char show[2];
-						sprintf(show,"%d",sendAllData[i]);
-						printf("index : %s\n",show);
-					}
 					//发送给服务器
-					Delay(10000000);
-					printf("数据打包完成,开始发送:\n");
+					delay_ms(1000);
+					delay_ms(1000);
 					esp8266_start_trans();
-					
 					for(u8 i = 0;i < 5;i++){
-						esp8266_send_data(sendAllData,50);//单次发送50字节数据
+						esp8266_send_data(sendAllData,50);
 						delay_ms(10);
 					}
 					
@@ -187,14 +172,13 @@ u8 processOK;//解析是否正常标志位
 						esp8266_send_data("callfinish",500);//结束标志
 						delay_ms(500);
 					}
-					
-					Delay(30000000);
+					delay_ms(1000);
 					esp8266_quit_trans();
-
 				}
-				USART3_RX_STA = 0;
+				
 			}
-			Delay(10000000);
+			printf("运行中\n");
+			delay_ms(1000);
 	}
  }
 

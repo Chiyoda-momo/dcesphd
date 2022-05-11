@@ -98,7 +98,7 @@ u8 esp8266_send_cmd(u8 *cmd,u8 *ack,u16 waittime)
 				if(esp8266_check_cmd(ack))
 				{
 					printf("ack:%s\r\n",(u8*)ack);
-					printf("获取数据完成!");
+					//printf("获取数据完成!");
 					break;//得到有效数据 
 				}
 					USART3_RX_STA=0;
@@ -146,7 +146,7 @@ u8* esp8266_send_data(u8 *cmd,u16 waittime)
 			{
 				USART3_RX_BUF[USART3_RX_STA&0X7FFF]=0;//添加结束符
 				ack=(char*)USART3_RX_BUF;
-				printf("发送数据后的接收:ack:%s\r\n",(u8*)ack);
+				//printf("发送数据后的接收:ack:%s\r\n",(u8*)ack);
 				USART3_RX_STA=0;
 				break;//得到有效数据 
 			} 
