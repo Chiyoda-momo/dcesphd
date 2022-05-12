@@ -280,7 +280,7 @@ void gpio_input_data_process(u8 gpio_pin,u8 process_type){
 		}
 	}else if(process_type == 1){
 		//模拟输入模式处理
-		u16* temp = get_ adc(gpio_pin);
+		u16* temp = get_adc(gpio_pin);
 		for(u8 i = 0;i < 500;i++){
 			sendAdcData[i] = *temp;
 			temp++;

@@ -36,6 +36,7 @@
 "..\obj\gpio.o"
 "..\obj\adc.o"
 "..\obj\time6.o"
+"..\obj\watchdog.o"
 "..\obj\dataprocessing.o"
 "..\obj\cjson.o"
 --strict --scatter "..\OBJ\Template.sct"

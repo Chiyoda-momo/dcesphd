@@ -1,13 +1,26 @@
 #include "timer7.h"
+#include "esp8266.h"
+#include "watchdog.h"
+
 
 extern vu16 USART3_RX_STA;
 
-void TIM7_IRQHandler(void)
-{ 	
-	if (TIM_GetITStatus(TIM7, TIM_IT_Update) != RESET)//是更新中断
-	{	 			   
-		USART3_RX_STA|=1<<15;	//标记接收完成
-		TIM_ClearITPendingBit(TIM7, TIM_IT_Update  );  //清除TIM7更新中断标志    
+void TIM7_IRQHandler(void){ 	
+	if (TIM_GetITStatus(TIM7, TIM_IT_Update) != RESET){//是更新中断	 			   
+		if(USART3_RX_STA&0X8000){
+				if(esp8266_check_cmd("ERROR")){
+					//如果接收到的数据是ERROR,直接重启.
+					USART3_RX_STA=0;
+					while(1){
+						//死循环,等待看门狗重置
+					}
+				}else{
+					feed_dog();//喂狗
+				}
+		}else{
+			feed_dog();//喂狗
+		} 
+		TIM_ClearITPendingBit(TIM7, TIM_IT_Update);  //清除TIM7更新中断标志    
 		TIM_Cmd(TIM7, DISABLE);  //关闭TIM7 
 	}	    
 }
@@ -17,8 +30,7 @@ void TIM7_IRQHandler(void)
 //定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us.
 //Ft=定时器工作频率,单位:Mhz 
 //通用定时器中断初始化 
-void TIM7_Int_Init(u16 arr,u16 psc)
-{	
+void TIM7_Int_Init(u16 arr,u16 psc){	
 	NVIC_InitTypeDef NVIC_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 

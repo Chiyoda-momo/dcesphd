@@ -30,3 +30,7 @@
 ..\obj\timer7.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\obj\timer7.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\timer7.o: ..\STM32F10x_FWLib\inc\misc.h
+..\obj\timer7.o: ..\HARDWARE\esp8266\esp8266.h
+..\obj\timer7.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\timer7.o: ..\HARDWARE\watchdog\watchdog.h
+..\obj\timer7.o: ..\HARDWARE\usart\usart1.h

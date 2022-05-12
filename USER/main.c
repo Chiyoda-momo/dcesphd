@@ -10,6 +10,7 @@
 #include "gpio.h"
 #include "adc.h"
 #include "dataprocessing.h"
+#include "watchdog.h"
 
 u16 adc1_data[500];//adc1的数据
 u16 adc2_data[500];//adc2的数据
@@ -39,6 +40,8 @@ u8 processOK;//解析是否正常标志位
 	 NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//中断配置
 	 uart_init(115200);//串口1配置
 	 usart3_init(115200);//串口3配置
+	 watch_dog_init(4,2 * 625);//每2秒重启一次
+	 TIM7_Int_Init(5000 - 1,72-1);//没10ms看一次ESP8266是否断开TCP连接
 	 TIM6_Int_Init(2000 - 1,72 - 1);//定时器6配置,2ms进行一次模拟输入取样 
 	 printf("开始esp8266初始化!");
 	 esp8266_Config();//ESP8266配置

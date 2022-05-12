@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart;..\DATAPROCESS;..\HARDWARE\adc;..\TOOLS</IncludePath>
+              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\esp8266;..\HARDWARE\gpio;..\HARDWARE\timer;..\HARDWARE\usart;..\DATAPROCESS;..\HARDWARE\adc;..\TOOLS;..\HARDWARE\watchdog</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -586,6 +586,11 @@
               <FileName>time6.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\timer\time6.c</FilePath>
+            </File>
+            <File>
+              <FileName>watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\watchdog\watchdog.c</FilePath>
             </File>
           </Files>
         </Group>
